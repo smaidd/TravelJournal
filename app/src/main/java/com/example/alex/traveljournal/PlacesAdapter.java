@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -30,8 +31,7 @@ public class PlacesAdapter extends RecyclerView.Adapter <PlacesHolder> {
         placesHolder.getmUpperText().setText(placesss.getmUpperName());
         placesHolder.getmBottomText().setText(placesss.getmBottomName());
 
-        Picasso.get().load(placesss.getmImage()).fit().centerCrop()
-                .into(placesHolder.getmImageView());
+        Glide.with(placesHolder.itemView).load(placesss.getmImage()).into(placesHolder.getmImageView());
     }
 
     @Override
