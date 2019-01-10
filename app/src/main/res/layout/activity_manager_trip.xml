@@ -22,6 +22,7 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/trip_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableLeft="@drawable/ic_info_outline_black_24dp"
@@ -94,17 +95,19 @@
         android:padding="@dimen/padding_secondaryLayout">
 
         <TextView
+            android:id="@+id/text_view_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/price_eur"
             android:textStyle="bold" />
 
         <SeekBar
+            android:id="@+id/seek_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/seekBar_topmargin"
-            android:max="250"
-            android:progress="15" />
+            android:max="1000"
+            android:progress="0" />
     </LinearLayout>
 
     <LinearLayout
@@ -179,6 +182,7 @@
         android:padding="@dimen/padding_secondaryLayout">
 
         <Button
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/save" />
