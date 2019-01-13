@@ -12,12 +12,14 @@ public class PlacesHolder extends RecyclerView.ViewHolder {
     private ImageView mImageView;
     private TextView mUpperText;
     private TextView mBottomText;
+    private TextView mRating;
 
     public PlacesHolder(@NonNull View itemView) {
         super(itemView);
-        mImageView = itemView.findViewById(R.id.imageView);
-        mUpperText = itemView.findViewById(R.id.textView);
-        mBottomText = itemView.findViewById(R.id.textView2);
+        mImageView = itemView.findViewById(R.id.imageView_place);
+        mUpperText = itemView.findViewById(R.id.period);
+        mBottomText = itemView.findViewById(R.id.place_to_go);
+        mRating = itemView.findViewById(R.id.rating_price);
     }
 
     public ImageView getmImageView() {
