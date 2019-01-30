@@ -22,6 +22,14 @@ public class PlacesHolder extends RecyclerView.ViewHolder {
         mRating = itemView.findViewById(R.id.rating_price);
     }
 
+    public TextView getmRating() {
+        return mRating;
+    }
+
+    public void setmRating(TextView mRating) {
+        this.mRating = mRating;
+    }
+
     public ImageView getmImageView() {
         return mImageView;
     }

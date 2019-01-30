@@ -32,12 +32,15 @@ public class Drawer extends AppCompatActivity
     private NavigationView mNavigationView;
     private Toolbar mToolbar;
     private FrameLayout mainContainer;
+    private List<Places> places_locations = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
         initView();
+
 
         setSupportActionBar(mToolbar);
 
@@ -64,11 +67,9 @@ public class Drawer extends AppCompatActivity
     }
 
     private void initFragment(HomeFragment homeFragment) {
-
-
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.main_container, homeFragment);
+        fragmentTransaction.add(R.id.main_container, homeFragment);
         fragmentTransaction.commit();
     }
 
@@ -110,6 +111,7 @@ public class Drawer extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -117,9 +119,11 @@ public class Drawer extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.home_drawer) {
-            Toast.makeText(this, "You chose home", Toast.LENGTH_SHORT).show();
-            HomeFragment homeFragment = new HomeFragment();
-            initFragment(homeFragment);
+            if (ManagerTripActivity.my_fragment.isAdded()) {
+                mDrawerLayout.closeDrawer(GravityCompat.START);
+            } else {
+                initFragment(ManagerTripActivity.my_fragment);
+            }
         } else if (id == R.id.favourite_drawer) {
             Toast.makeText(this, "You chose fav", Toast.LENGTH_SHORT).show();
         } else if (id == R.id.about_us) {
