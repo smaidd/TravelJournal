@@ -69,7 +69,7 @@ public class Drawer extends AppCompatActivity
     private void initFragment(HomeFragment homeFragment) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.main_container, homeFragment);
+        fragmentTransaction.replace(R.id.main_container, homeFragment);
         fragmentTransaction.commit();
     }
 
@@ -120,9 +120,11 @@ public class Drawer extends AppCompatActivity
 
         if (id == R.id.home_drawer) {
             if (ManagerTripActivity.my_fragment.isAdded()) {
-                mDrawerLayout.closeDrawer(GravityCompat.START);
+                mDrawerLayout.closeDrawers();
+                return false;
             } else {
                 initFragment(ManagerTripActivity.my_fragment);
+
             }
         } else if (id == R.id.favourite_drawer) {
             Toast.makeText(this, "You chose fav", Toast.LENGTH_SHORT).show();

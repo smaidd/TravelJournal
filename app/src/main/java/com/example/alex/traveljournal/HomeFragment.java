@@ -41,17 +41,19 @@ public class HomeFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
         Log.d("debugMode", "The application stopped after this");
-        try {
-            PlacesAdapter placesAdapter = new PlacesAdapter(getPlaces());
-            mRecyclerView.setAdapter(placesAdapter);
-            return view;
-        }catch (EmptyListException o){
-            Toast.makeText(this.getActivity(), "Empty list", Toast.LENGTH_SHORT).show();
-        }
-        return  null;
+
+
+        PlacesAdapter placesAdapter = new PlacesAdapter(getPlaces());
+
+
+        mRecyclerView.setAdapter(placesAdapter);
+        placesAdapter.notifyDataSetChanged();
+
+
+        return view;
+
 
     }
-
 
 
     private List<Places> getPlaces() {
@@ -62,9 +64,10 @@ public class HomeFragment extends Fragment {
             String destination = bundle.getString(ManagerTripActivity.getDESTINATION());
             double rating = bundle.getDouble(ManagerTripActivity.getRATING());
             int seek = bundle.getInt(ManagerTripActivity.getSEEK());
-            placesListTrips.add(new Places(trip_name, destination, "https://aventurescu.ro/wp-content/uploads/2018/07/Roma-aventurescu-3.jpg",rating,seek));
+
+            placesListTrips.add(new Places(trip_name, destination, "https://aventurescu.ro/wp-content/uploads/2018/07/Roma-aventurescu-3.jpg", rating, seek));
         }
-        if(placesListTrips.isEmpty()){
+        if (placesListTrips.isEmpty()) {
             throw new EmptyListException();
         }
         return placesListTrips;

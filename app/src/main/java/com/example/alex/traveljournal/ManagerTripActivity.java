@@ -78,15 +78,16 @@ public class ManagerTripActivity extends AppCompatActivity {
     }
 
     public void btnSaveTravel(View view) {
+
         if (mTripName != null && mDestination != null) {
             String nume_trip = mTripName.getText().toString();
             String destinatie = mDestination.getText().toString();
             double rating = mRatingBar.getRating();
             int seekbar = mSeekBar.getProgress();
             if (!nume_trip.isEmpty() && !destinatie.isEmpty()) {
-
-                Intent intent = new Intent(this, Drawer.class);
                 Bundle bundle = new Bundle();
+                Intent intent = new Intent(this, Drawer.class);
+
                 bundle.putString(TRIP_NAME, nume_trip);
                 bundle.putString(DESTINATION, destinatie);
                 bundle.putDouble(RATING, rating);
