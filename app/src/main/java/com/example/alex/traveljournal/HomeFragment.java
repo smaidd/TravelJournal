@@ -1,6 +1,7 @@
 package com.example.alex.traveljournal;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +34,7 @@ import java.util.List;
  */
 public class HomeFragment extends Fragment {
     private RecyclerView mRecyclerView;
-    private String trip_name;
-    Bundle bundle;
-    private String destination;
+
 
     public HomeFragment() {
         // Required empty public constructor
@@ -40,14 +50,39 @@ public class HomeFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.recycler_view_trips_wowow);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getActivity());
         mRecyclerView.setLayoutManager(layoutManager);
-        Log.d("debugMode", "The application stopped after this");
 
 
-        PlacesAdapter placesAdapter = new PlacesAdapter(getPlaces());
+        FirebaseFirestore mFirestore = FirebaseFirestore.getInstance();
+        mFirestore.collection("TRIPS")
+                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
 
 
-        mRecyclerView.setAdapter(placesAdapter);
-        placesAdapter.notifyDataSetChanged();
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                List<Places> places = new ArrayList<>();
+
+                if (task.isSuccessful()) {
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String place = document.getString("mLocation");
+                        String tripName = document.getString("mTripName");
+                        String image = document.getString("mImage");
+                        double rating = document.getDouble("mRating");
+                        long seek = document.getLong("mSeek");
+                        places.add(new Places(place, tripName, image, rating, (int) seek));
+
+                    }
+                } else {
+                    Log.e("EROARE", task.getException().toString());
+                }
+
+                PlacesAdapter placesAdapter = new PlacesAdapter(places);
+                mRecyclerView.setAdapter(placesAdapter);
+                placesAdapter.notifyDataSetChanged();
+
+            }
+
+
+        });
 
 
         return view;
@@ -55,24 +90,5 @@ public class HomeFragment extends Fragment {
 
     }
 
-
-    private List<Places> getPlaces() {
-        List<Places> placesListTrips = new ArrayList<>();
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String trip_name = bundle.getString(ManagerTripActivity.getTripName());
-            String destination = bundle.getString(ManagerTripActivity.getDESTINATION());
-            double rating = bundle.getDouble(ManagerTripActivity.getRATING());
-            int seek = bundle.getInt(ManagerTripActivity.getSEEK());
-
-            placesListTrips.add(new Places(trip_name, destination, "https://aventurescu.ro/wp-content/uploads/2018/07/Roma-aventurescu-3.jpg", rating, seek));
-        }
-        if (placesListTrips.isEmpty()) {
-            throw new EmptyListException();
-        }
-        return placesListTrips;
-
-
-    }
 
 }

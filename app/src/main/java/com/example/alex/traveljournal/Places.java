@@ -1,34 +1,45 @@
 package com.example.alex.traveljournal;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Places {
-    private String mUpperName;
-    private String mBottomName;
+    @SerializedName("location")
+    private String mLocation;
+
+    @SerializedName("trip")
+    private String mTripName;
+
+    @SerializedName("image")
     private String mImage;
+
+    @SerializedName("rating")
     private double mRating;
+
+    @SerializedName("price")
     private int mSeek;
 
-    public Places(String mUpperName, String mBottomName, String mImage, double mRating, int mSeek) {
-        this.mUpperName = mUpperName;
-        this.mBottomName = mBottomName;
-        this.mImage = mImage;
-        this.mRating = mRating;
-        this.mSeek = mSeek;
+    public Places(String location, String trip, String image, double rating, int price) {
+        this.mLocation = location;
+        this.mTripName = trip;
+        this.mImage = image;
+        this.mRating = rating;
+        this.mSeek = price;
     }
 
-    public String getmUpperName() {
-        return mUpperName;
+    public String getmLocation() {
+        return mLocation;
     }
 
-    public void setmUpperName(String mUpperName) {
-        this.mUpperName = mUpperName;
+    public void setmLocation(String mLocation) {
+        this.mLocation = mLocation;
     }
 
-    public String getmBottomName() {
-        return mBottomName;
+    public String getmTripName() {
+        return mTripName;
     }
 
-    public void setmBottomName(String mBottomName) {
-        this.mBottomName = mBottomName;
+    public void setmTripName(String mTripName) {
+        this.mTripName = mTripName;
     }
 
     public String getmImage() {

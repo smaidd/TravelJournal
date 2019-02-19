@@ -30,8 +30,8 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesHolder> {
 
         if (places != null) {
             Places placesss = places.get(i);
-            placesHolder.getmUpperText().setText(placesss.getmUpperName());
-            placesHolder.getmBottomText().setText(placesss.getmBottomName());
+            placesHolder.getmUpperText().setText(placesss.getmTripName());
+            placesHolder.getmBottomText().setText(placesss.getmLocation());
             placesHolder.getmRating().setText("Rating: " + placesss.getmRating() + " stars" + '\n' + "Price: " + placesss.getmSeek() + " euro");
             Glide.with(placesHolder.itemView).load(placesss.getmImage()).into(placesHolder.getmImageView());
         } else {
@@ -43,6 +43,6 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesHolder> {
 
     @Override
     public int getItemCount() {
-        return 1;
+        return places.size();
     }
 }

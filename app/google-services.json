@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "148423213627",
+    "firebase_url": "https://traveljournal-f6075.firebaseio.com",
+    "project_id": "traveljournal-f6075",
+    "storage_bucket": "traveljournal-f6075.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:148423213627:android:18b80c249e4cbc62",
+        "android_client_info": {
+          "package_name": "com.example.alex.traveljournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "148423213627-cui1garnpmdm2kq3d61919ebgam8rjp8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDt0rcZ0zIE8DMOHoiMnzNQsbCgIhUcyus"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

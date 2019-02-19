@@ -2,6 +2,7 @@ package com.example.alex.traveljournal;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,17 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,12 +45,15 @@ public class Drawer extends AppCompatActivity
     private Toolbar mToolbar;
     private FrameLayout mainContainer;
     private List<Places> places_locations = new ArrayList<>();
+    private GoogleSignInClient googleSignInClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drawer);
+
+
         initView();
 
 
@@ -115,26 +130,38 @@ public class Drawer extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
+        HomeFragment h = new HomeFragment();
         int id = item.getItemId();
 
         if (id == R.id.home_drawer) {
-            if (ManagerTripActivity.my_fragment.isAdded()) {
+            if (h.isAdded()) {
                 mDrawerLayout.closeDrawers();
                 return false;
             } else {
-                initFragment(ManagerTripActivity.my_fragment);
-
+                initFragment(h);
             }
-        } else if (id == R.id.favourite_drawer) {
-            Toast.makeText(this, "You chose fav", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.about_us) {
-            Toast.makeText(this, "You chose bout us", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.contact_drawer) {
-            Toast.makeText(this, "You chose contact us", Toast.LENGTH_SHORT).show();
-        } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+
+        } else if (id == R.id.favourite_drawer)
+
+        {
+
+
+        } else if (id == R.id.about_us)
+
+        {
+            Toast.makeText(this, "You chose bout us", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.contact_drawer)
+
+        {
+            Toast.makeText(this, "You chose contact us", Toast.LENGTH_SHORT).show();
+        } else if (id == R.id.nav_share)
+
+        {
+
+        } else if (id == R.id.nav_send)
+
+        {
 
         }
 
@@ -142,4 +169,6 @@ public class Drawer extends AppCompatActivity
         mDrawerLayout.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
 }

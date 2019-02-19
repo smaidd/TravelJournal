@@ -1,8 +1,17 @@
 package com.example.alex.traveljournal;
 
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,20 +21,34 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.gson.annotations.SerializedName;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class ManagerTripActivity extends AppCompatActivity {
+
     private SeekBar mSeekBar;
     private TextView mTextView;
     private RatingBar mRatingBar;
     private EditText mTripName;
     private EditText mDestination;
+
+    String imageFilePath;
+
     private static final String TRIP_NAME = "trip";
     private static final String DESTINATION = "destination";
     private static final String SEEK = "seek";
     private static final String RATING = "rating";
-
-    public static HomeFragment my_fragment = new HomeFragment();
+    private static final int REQ_CODE_CAMERA = 1;
+    private FirebaseFirestore mFireStore;
 
 
     @Override
@@ -33,6 +56,7 @@ public class ManagerTripActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manager_trip);
         initView();
+        initFireStore();
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -60,6 +84,10 @@ public class ManagerTripActivity extends AppCompatActivity {
         mRatingBar = findViewById(R.id.rating_bar);
     }
 
+    private void initFireStore() {
+        mFireStore = FirebaseFirestore.getInstance();
+    }
+
 
     public static String getTripName() {
         return TRIP_NAME;
@@ -85,14 +113,15 @@ public class ManagerTripActivity extends AppCompatActivity {
             double rating = mRatingBar.getRating();
             int seekbar = mSeekBar.getProgress();
             if (!nume_trip.isEmpty() && !destinatie.isEmpty()) {
-                Bundle bundle = new Bundle();
+
                 Intent intent = new Intent(this, Drawer.class);
 
-                bundle.putString(TRIP_NAME, nume_trip);
-                bundle.putString(DESTINATION, destinatie);
-                bundle.putDouble(RATING, rating);
-                bundle.putInt(SEEK, seekbar);
-                my_fragment.setArguments(bundle);
+
+                CollectionReference collectionReference = mFireStore.collection("TRIPS");
+                Places places = new Places(nume_trip, destinatie, "", rating, seekbar);
+                collectionReference.add(places);
+
+
                 startActivity(intent);
 
                 System.out.println("A mers");
@@ -115,4 +144,11 @@ public class ManagerTripActivity extends AppCompatActivity {
         DatePicker datePicker = new DatePicker();
         datePicker.show(getSupportFragmentManager(), "EndDate");
     }
+
+    public void btnStartCamera(View view) {
+
+    }
+
 }
+
+
