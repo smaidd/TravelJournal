@@ -1,6 +1,7 @@
 package com.example.alex.traveljournal;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,12 @@ import java.util.List;
 public class PlacesAdapter extends RecyclerView.Adapter<PlacesHolder> {
     private List<Places> places;
 
+
     public PlacesAdapter(List<Places> places) {
         this.places = places;
+    }
+
+    public PlacesAdapter() {
     }
 
     @NonNull
@@ -45,4 +50,5 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesHolder> {
     public int getItemCount() {
         return places.size();
     }
+
 }

@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,8 +20,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -29,6 +32,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -42,10 +46,16 @@ public class Drawer extends AppCompatActivity
     private RecyclerView mRecyclerView;
     private FloatingActionButton mFAB;
     private NavigationView mNavigationView;
+    private FirebaseFirestore mFireStore;
+
+
+
     private Toolbar mToolbar;
     private FrameLayout mainContainer;
     private List<Places> places_locations = new ArrayList<>();
     private GoogleSignInClient googleSignInClient;
+
+
 
 
     @Override
@@ -55,6 +65,9 @@ public class Drawer extends AppCompatActivity
 
 
         initView();
+        initFirestore();
+
+
 
 
         setSupportActionBar(mToolbar);
@@ -68,6 +81,7 @@ public class Drawer extends AppCompatActivity
 
         mNavigationView.setNavigationItemSelectedListener(this);
 
+
     }
 
     private void initView() {
@@ -79,6 +93,11 @@ public class Drawer extends AppCompatActivity
         mNavigationView = findViewById(R.id.nav_view);
 
 
+
+
+    }
+    private void initFirestore(){
+        mFireStore = FirebaseFirestore.getInstance();
     }
 
     private void initFragment(HomeFragment homeFragment) {
@@ -87,6 +106,14 @@ public class Drawer extends AppCompatActivity
         fragmentTransaction.replace(R.id.main_container, homeFragment);
         fragmentTransaction.commit();
     }
+    private void initDescriberFragment(DescriereFragment descriereFragment){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.main_container, descriereFragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 
 
     public void btnAddNewTravel(View view) {
@@ -139,6 +166,7 @@ public class Drawer extends AppCompatActivity
                 return false;
             } else {
                 initFragment(h);
+
             }
 
 
@@ -170,5 +198,16 @@ public class Drawer extends AppCompatActivity
         return true;
     }
 
+    public void btnFavAdd(View view) {
+
+    }
+
+
+    public void btnDescribe(View view) {
+        DescriereFragment descriereFragment = new DescriereFragment();
+        initDescriberFragment(descriereFragment);
+    }
 
 }
+
+

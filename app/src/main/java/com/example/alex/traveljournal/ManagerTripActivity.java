@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RatingBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class ManagerTripActivity extends AppCompatActivity {
     private RatingBar mRatingBar;
     private EditText mTripName;
     private EditText mDestination;
+
 
     String imageFilePath;
 
@@ -82,6 +84,7 @@ public class ManagerTripActivity extends AppCompatActivity {
         mTripName = findViewById(R.id.trip_name);
         mDestination = findViewById(R.id.destination);
         mRatingBar = findViewById(R.id.rating_bar);
+
     }
 
     private void initFireStore() {
@@ -148,6 +151,7 @@ public class ManagerTripActivity extends AppCompatActivity {
     public void btnStartCamera(View view) {
 
     }
+
 
 }
 

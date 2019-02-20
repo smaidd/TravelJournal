@@ -1,18 +1,25 @@
 package com.example.alex.traveljournal;
 
 import android.support.annotation.NonNull;
+
+
 import android.support.v7.widget.RecyclerView;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
-import org.w3c.dom.Text;
+
 
 public class PlacesHolder extends RecyclerView.ViewHolder {
-    private ImageView mImageView;
-    private TextView mUpperText;
-    private TextView mBottomText;
-    private TextView mRating;
+    private  ImageView mImageView;
+    private  TextView mUpperText;
+    private  TextView mBottomText;
+    private  TextView mRating;
+    private  ToggleButton mFavToggle;
+
+
 
     public PlacesHolder(@NonNull View itemView) {
         super(itemView);
@@ -20,6 +27,9 @@ public class PlacesHolder extends RecyclerView.ViewHolder {
         mUpperText = itemView.findViewById(R.id.period);
         mBottomText = itemView.findViewById(R.id.place_to_go);
         mRating = itemView.findViewById(R.id.rating_price);
+        mFavToggle = itemView.findViewById(R.id.button_favourite);
+
+
     }
 
     public TextView getmRating() {
@@ -52,5 +62,17 @@ public class PlacesHolder extends RecyclerView.ViewHolder {
 
     public void setmBottomText(TextView mBottomText) {
         this.mBottomText = mBottomText;
+
     }
+
+
+    public ToggleButton getmFavToggle() {
+        return mFavToggle;
+    }
+
+    public void setmFavToggle(ToggleButton mFavToggle) {
+        this.mFavToggle = mFavToggle;
+    }
+
+
 }
