@@ -34,7 +34,7 @@ public class PlacesAdapter extends RecyclerView.Adapter<PlacesHolder> {
             placesHolder.getmBottomText().setText(placesss.getmLocation());
             placesHolder.getmRating().setText("Rating: " + placesss.getmRating() + " stars" + '\n' + "Price: " + placesss.getmSeek() + " euro");
             placesHolder.getmImageView().setImageBitmap(placesss.getBitmap());
-            //Glide.with(placesHolder.itemView).load(placesss.getmImage()).into(placesHolder.getmImageView());
+
         } else {
             throw new EmptyListException();
         }

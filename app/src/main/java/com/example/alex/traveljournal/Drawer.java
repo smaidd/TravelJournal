@@ -171,4 +171,7 @@ public class Drawer extends AppCompatActivity
     }
 
 
+    public void btnDetails(View view) {
+        Toast.makeText(this, "DETAILS", Toast.LENGTH_SHORT).show();
+    }
 }

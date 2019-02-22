@@ -71,14 +71,7 @@ public class HomeFragment extends Fragment {
                         String image = document.getString("mImage");
                         double rating = document.getDouble("mRating");
                         long seek = document.getLong("mSeek");
-                        Bitmap bitmap = null;
-                        try {
-                            byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
-                            bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
-                                    encodeByte.length);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
+                        Bitmap bitmap = StringToBitmap(image);
 
                         places.add(new Places(place, tripName, rating, (int) seek, bitmap));
 
@@ -101,6 +94,19 @@ public class HomeFragment extends Fragment {
 
 
     }
+    public Bitmap StringToBitmap(String image){
+
+        Bitmap bitmap = null;
+        try {
+            byte[] encodeByte = Base64.decode(image, Base64.DEFAULT);
+            bitmap = BitmapFactory.decodeByteArray(encodeByte, 0,
+                    encodeByte.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
 
 
 }

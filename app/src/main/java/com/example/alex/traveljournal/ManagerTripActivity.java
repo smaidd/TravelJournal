@@ -8,6 +8,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -27,13 +29,17 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -46,17 +52,16 @@ public class ManagerTripActivity extends AppCompatActivity {
     private RatingBar mRatingBar;
     private EditText mTripName;
     private EditText mDestination;
-    private Bitmap bitmap;
-    private String url;
 
-    String imageFilePath;
+    public String url;
+
 
     private static final String TRIP_NAME = "trip";
     private static final String DESTINATION = "destination";
     private static final String SEEK = "seek";
     private static final String RATING = "rating";
     private static final int REQ_CODE_CAMERA = 1;
-    private static final int REQ_OPEN_GALERY = 2;
+    private static final int REQ_OPEN_GALERY = 144;
     private FirebaseFirestore mFireStore;
 
 
@@ -126,9 +131,21 @@ public class ManagerTripActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, Drawer.class);
 
 
-                CollectionReference collectionReference = mFireStore.collection("TRIPS");
+                //  CollectionReference collectionReference = mFireStore.collection("TRIPS");
                 Places places = new Places(nume_trip, destinatie, url, rating, seekbar);
-                collectionReference.add(places);
+                // collectionReference.add(places);
+
+                mFireStore.collection("TRIPS").document(nume_trip).set(places).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(ManagerTripActivity.this, "Added", Toast.LENGTH_SHORT).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(ManagerTripActivity.this, "Faild", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
 
                 startActivity(intent);
@@ -167,54 +184,57 @@ public class ManagerTripActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-    }
 
     public void btnOpenGalery(View view) {
-        Intent intent = new Intent();
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQ_OPEN_GALERY);
+
+        startActivityForResult(intent.createChooser(intent, "Select"), REQ_OPEN_GALERY);
     }
-
-
-
-
-
-
-
 
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQ_OPEN_GALERY) {
-            if (requestCode == Activity.RESULT_OK) {
-                if (data != null) {
-                    try {
-                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
-                        BitMapToString(bitmap);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+            if (resultCode == Activity.RESULT_OK) {
+                Uri uri = data.getData();
+                try {
+                    InputStream inputStream = getContentResolver().openInputStream(uri);
+                    Bitmap recivedImage = BitmapFactory.decodeStream(inputStream);
+                    BitMapToString(recivedImage);
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
                 }
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                finishActivity(REQ_CODE_CAMERA);
             }
         }
         if (requestCode == REQ_CODE_CAMERA) {
-            Bundle extras = data.getExtras();
-            Bitmap imagebitmap = (Bitmap) extras.get("data");
-            BitMapToString(imagebitmap);
+            if (resultCode == RESULT_OK) {
+                Bundle extras = data.getExtras();
+                Bitmap imagebitmap = (Bitmap) extras.get("data");
+                BitMapToString(imagebitmap);
+            }
+            if (resultCode == RESULT_CANCELED) {
+                finishActivity(REQ_OPEN_GALERY);
+            }
         }
     }
 
     public String BitMapToString(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] b = baos.toByteArray();
         url = Base64.encodeToString(b, Base64.DEFAULT);
+        return url;
+    }
+
+    public String getUrl() {
         return url;
     }
 }
