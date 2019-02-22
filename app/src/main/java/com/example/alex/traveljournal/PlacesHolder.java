@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 import org.w3c.dom.Text;
 
@@ -14,13 +15,17 @@ public class PlacesHolder extends RecyclerView.ViewHolder {
     private TextView mBottomText;
     private TextView mRating;
 
+
     public PlacesHolder(@NonNull View itemView) {
         super(itemView);
         mImageView = itemView.findViewById(R.id.imageView_place);
         mUpperText = itemView.findViewById(R.id.period);
         mBottomText = itemView.findViewById(R.id.place_to_go);
         mRating = itemView.findViewById(R.id.rating_price);
+
     }
+
+
 
     public TextView getmRating() {
         return mRating;

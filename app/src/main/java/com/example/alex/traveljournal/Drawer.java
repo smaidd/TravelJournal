@@ -19,8 +19,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -44,6 +46,7 @@ public class Drawer extends AppCompatActivity
     private NavigationView mNavigationView;
     private Toolbar mToolbar;
     private FrameLayout mainContainer;
+    private ToggleButton mToggleButton;
     private List<Places> places_locations = new ArrayList<>();
     private GoogleSignInClient googleSignInClient;
 
@@ -77,7 +80,6 @@ public class Drawer extends AppCompatActivity
         mToolbar = findViewById(R.id.toolbar);
         mainContainer = findViewById(R.id.main_container);
         mNavigationView = findViewById(R.id.nav_view);
-
 
     }
 
@@ -173,5 +175,20 @@ public class Drawer extends AppCompatActivity
 
     public void btnDetails(View view) {
         Toast.makeText(this, "DETAILS", Toast.LENGTH_SHORT).show();
+    }
+
+    public void btnFav(View view) {
+        mToggleButton = view.findViewById(R.id.fav_button);
+        mToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    Toast.makeText(Drawer.this, "Checked", Toast.LENGTH_SHORT).show();
+                }
+                if(!isChecked){
+                    Toast.makeText(Drawer.this, "Unchecked", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 }
