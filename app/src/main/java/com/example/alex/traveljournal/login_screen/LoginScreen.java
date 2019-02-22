@@ -43,12 +43,12 @@ public class LoginScreen extends AppCompatActivity {
         mFireAuth = FirebaseAuth.getInstance();
 
 
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+//                .requestEmail()
+//                .build();
 
-        mGoogleApiClient = GoogleSignIn.getClient(this, gso);
+//        mGoogleApiClient = GoogleSignIn.getClient(this, gso);
 
 
     }
@@ -59,7 +59,7 @@ public class LoginScreen extends AppCompatActivity {
     }
 
 
-    public void btnRegister(View view) {
+    public void btnRegister(final View view) {
         String email = mEmail.getText().toString();
         String password = mPass.getText().toString();
         if (email.isEmpty() || password.isEmpty()) {
@@ -72,7 +72,10 @@ public class LoginScreen extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+
                     loginSucces();
+                } else {
+                    Snackbar.make(view, getString(R.string.error_snak), Snackbar.LENGTH_LONG).show();
                 }
             }
         });
