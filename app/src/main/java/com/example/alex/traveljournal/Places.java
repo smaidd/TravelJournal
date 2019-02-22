@@ -1,5 +1,8 @@
 package com.example.alex.traveljournal;
 
+import android.graphics.Bitmap;
+import android.widget.ImageView;
+
 import com.google.gson.annotations.SerializedName;
 
 public class Places {
@@ -18,12 +21,23 @@ public class Places {
     @SerializedName("price")
     private int mSeek;
 
-    public Places(String location, String trip, String image, double rating, int price) {
-        this.mLocation = location;
-        this.mTripName = trip;
-        this.mImage = image;
-        this.mRating = rating;
-        this.mSeek = price;
+    @SerializedName("Bitmap")
+    private Bitmap bitmap;
+
+    public Places(String mLocation, String mTripName, String mImage, double mRating, int mSeek) {
+        this.mLocation = mLocation;
+        this.mTripName = mTripName;
+        this.mImage = mImage;
+        this.mRating = mRating;
+        this.mSeek = mSeek;
+    }
+
+    public Places(String mLocation, String mTripName, double mRating, int mSeek, Bitmap bitmap) {
+        this.mLocation = mLocation;
+        this.mTripName = mTripName;
+        this.mRating = mRating;
+        this.mSeek = mSeek;
+        this.bitmap = bitmap;
     }
 
     public String getmLocation() {
@@ -64,5 +78,13 @@ public class Places {
 
     public void setmSeek(int mSeek) {
         this.mSeek = mSeek;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }

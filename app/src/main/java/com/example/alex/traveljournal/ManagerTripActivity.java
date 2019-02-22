@@ -1,19 +1,25 @@
 package com.example.alex.traveljournal;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -40,6 +46,8 @@ public class ManagerTripActivity extends AppCompatActivity {
     private RatingBar mRatingBar;
     private EditText mTripName;
     private EditText mDestination;
+    private Bitmap bitmap;
+    private String url;
 
     String imageFilePath;
 
@@ -48,6 +56,7 @@ public class ManagerTripActivity extends AppCompatActivity {
     private static final String SEEK = "seek";
     private static final String RATING = "rating";
     private static final int REQ_CODE_CAMERA = 1;
+    private static final int REQ_OPEN_GALERY = 2;
     private FirebaseFirestore mFireStore;
 
 
@@ -118,7 +127,7 @@ public class ManagerTripActivity extends AppCompatActivity {
 
 
                 CollectionReference collectionReference = mFireStore.collection("TRIPS");
-                Places places = new Places(nume_trip, destinatie, "", rating, seekbar);
+                Places places = new Places(nume_trip, destinatie, url, rating, seekbar);
                 collectionReference.add(places);
 
 
@@ -145,10 +154,69 @@ public class ManagerTripActivity extends AppCompatActivity {
         datePicker.show(getSupportFragmentManager(), "EndDate");
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
     public void btnStartCamera(View view) {
+        if (checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA},
+                    REQ_CODE_CAMERA);
+        } else {
+            Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                startActivityForResult(takePictureIntent, REQ_CODE_CAMERA);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
     }
 
+    public void btnOpenGalery(View view) {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), REQ_OPEN_GALERY);
+    }
+
+
+
+
+
+
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_OPEN_GALERY) {
+            if (requestCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), data.getData());
+                        BitMapToString(bitmap);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+        if (requestCode == REQ_CODE_CAMERA) {
+            Bundle extras = data.getExtras();
+            Bitmap imagebitmap = (Bitmap) extras.get("data");
+            BitMapToString(imagebitmap);
+        }
+    }
+
+    public String BitMapToString(Bitmap bitmap) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] b = baos.toByteArray();
+        url = Base64.encodeToString(b, Base64.DEFAULT);
+        return url;
+    }
 }
 
 
