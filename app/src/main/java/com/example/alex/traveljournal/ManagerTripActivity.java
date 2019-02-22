@@ -131,9 +131,9 @@ public class ManagerTripActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, Drawer.class);
 
 
-                //  CollectionReference collectionReference = mFireStore.collection("TRIPS");
+
                 Places places = new Places(nume_trip, destinatie, url, rating, seekbar);
-                // collectionReference.add(places);
+                
 
                 mFireStore.collection("TRIPS").document(nume_trip).set(places).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
