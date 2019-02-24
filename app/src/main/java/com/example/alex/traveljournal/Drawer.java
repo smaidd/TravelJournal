@@ -182,13 +182,14 @@ public class Drawer extends AppCompatActivity
         mToggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    Toast.makeText(Drawer.this, "Checked", Toast.LENGTH_SHORT).show();
+                if (mToggleButton.isPressed() && isChecked) {
+                    Toast.makeText(Drawer.this, "Added", Toast.LENGTH_SHORT).show();
                 }
                 if(!isChecked){
-                    Toast.makeText(Drawer.this, "Unchecked", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Drawer.this, "Removed", Toast.LENGTH_SHORT).show();
                 }
             }
         });
     }
+
 }

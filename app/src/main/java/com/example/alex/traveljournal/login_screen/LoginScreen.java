@@ -22,6 +22,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -34,13 +35,13 @@ public class LoginScreen extends AppCompatActivity {
     private EditText mPass;
     private FirebaseAuth mFireAuth;
     private GoogleSignInClient mGoogleApiClient;
+    private GoogleSignInOptions mSignInOpt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_screen);
         initView();
-        mFireAuth = FirebaseAuth.getInstance();
 
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -50,7 +51,18 @@ public class LoginScreen extends AppCompatActivity {
 
         mGoogleApiClient = GoogleSignIn.getClient(this, gso);
 
+        mFireAuth = FirebaseAuth.getInstance();
 
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GoogleSignInAccount acc = GoogleSignIn.getLastSignedInAccount(this);
+        if (acc != null) {
+
+        }
     }
 
     private void initView() {
@@ -64,24 +76,25 @@ public class LoginScreen extends AppCompatActivity {
         String password = mPass.getText().toString();
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Please fill the text", Toast.LENGTH_SHORT).show();
-        }
-        if (password.length() < 6) {
-            Toast.makeText(this, "Chose a stronger pass", Toast.LENGTH_SHORT).show();
-        }
-        mFireAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (task.isSuccessful()) {
-                    loginSucces();
+        } else {
+            mFireAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        loginSucces();
+                    }
                 }
-            }
-        });
+            });
+
+        }
     }
 
     public void btnLogin(final View view) {
         String email = mEmail.getText().toString();
         String password = mPass.getText().toString();
-        if (!email.isEmpty() && !password.isEmpty()) {
+        if (email.isEmpty() || password.isEmpty()) {
+            Toast.makeText(this, "Please fill the fields", Toast.LENGTH_SHORT).show();
+        } else {
             mFireAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -91,28 +104,26 @@ public class LoginScreen extends AppCompatActivity {
                         Snackbar.make(view, getString(R.string.snack_eror), Snackbar.LENGTH_LONG).show();
                     }
                 }
-            });
-        } else {
-            Toast.makeText(this, "Please fill the fields", Toast.LENGTH_SHORT).show();
-        }
 
+            });
+
+        }
     }
 
-
-    //neimplemenat
     private void authWithGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         mFireAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
-                    startActivity(new Intent(getApplicationContext(), Drawer.class));
-                    finish();
+                    startActivity(new Intent(LoginScreen.this, Drawer.class));
+
                 } else {
                     Toast.makeText(getApplicationContext(), "Auth Error", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+
     }
 
     private void loginSucces() {
@@ -121,4 +132,32 @@ public class LoginScreen extends AppCompatActivity {
         finish();
     }
 
+    //inca nu functioneaza
+    public void btnGoogleSignIn(View view) {
+        signIn();
+    }
+
+    private void signIn() {
+        Intent signInIntent = mGoogleApiClient.getSignInIntent();
+        startActivityForResult(signInIntent, REQ_ACCES);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_ACCES) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+
+        }
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            authWithGoogle(account);
+        } catch (ApiException e) {
+            e.printStackTrace();
+        }
+    }
 }

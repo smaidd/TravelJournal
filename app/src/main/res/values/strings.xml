@@ -31,4 +31,6 @@
     <string name="camera_opt">Gallery photo</string>
     <string name="take_picture">Take Picture</string>
     <string name="snack_eror">Login error</string>
+    <string name="hint_email">Email</string>
+    <string name="password">Password</string>
 </resources>
